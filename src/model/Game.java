@@ -43,7 +43,14 @@ public class Game {
     public List<Move> getOldMoves() {
         return oldMoves;
     }
-    
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -74,7 +81,7 @@ public class Game {
             return this;
         }
 
-        public Game build(Builder builder) {
+        public Game build() {
             validate();
             return new Game(new Board(size), players);
         }

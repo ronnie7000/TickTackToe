@@ -10,7 +10,7 @@ public class Board {
 
     public Board(int size) {
         this.size = size;
-
+        cells = new ArrayList<>();
         //initialize the cells in the board
 
         for(int i = 0; i < size; i++) {
