@@ -1,44 +1,64 @@
 package src;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import src.controller.GameController;
+import src.exception.GameDrawnException;
 import src.model.Game;
+import src.model.Move;
 import src.model.Player;
+import src.model.enums.GameState;
 import src.service.BoardService;
 import src.service.GameService;
 import src.service.PlayerService;
 
 public class Main {
     public static void main(String[] args) {
-
         PlayerService playerService = new PlayerService();
         GameService gameService = new GameService();
         BoardService boardService = new BoardService();
+        GameController gameController = new GameController(playerService, gameService);
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("WELCOME TO TIC TAC TOE GAME.");
-        
-        System.out.println("Please enter the size of the board : ");
-        int size = sc.nextInt();
+        try {
+            System.out.println("WELCOME TO TIC TAC TOE GAME.");
 
-        List<Player> players = new ArrayList<>();
-        System.out.println("Please enter player details.");
+            System.out.println("Please enter the size of the board : ");
+            int size = sc.nextInt();
 
-        for(int i = 0; i < size-1; i++) {
-            System.out.println("Player "+ (i+1) +" Name : " );
-            String name = sc.nextLine();
-            name = sc.nextLine();
-            System.out.println("Player "+ (i+1) +" Symbol : " );
-            char symbol = sc.nextLine().charAt(0);
-            players.add(playerService.createPlayer(name, symbol));
+            List<Player> players = gameController.generatePlayers(size);
+
+            Game game = gameService.createGame(size, players);
+            game = gameService.startGame(game);
+
+            while (true) {
+                int nextPlayerIndex = game.getNextPlayerIndex();
+                Player currentPlayer = game.getPlayers().get(nextPlayerIndex);
+
+                System.out.println("Player to make a move : " + currentPlayer.getName());
+                boardService.printBoard(game.getBoard());
+                System.out.println();
+
+                Move move = gameController.createMove(currentPlayer, game);
+                try {
+                    Player winner = gameController.checkWinner(game.getBoard(), move, game.getWinnerService());
+                    if (winner != null) {
+                        game.setGameState(GameState.WINNER_DONE);
+                        System.out.println("Winner is " + winner.getName());
+                        boardService.printBoard(game.getBoard());
+                        break;
+                    }
+                } catch (GameDrawnException e) {
+                    System.out.println(e.getMessage());
+                    break;
+                }
+                game.setNextPlayerIndex((game.getNextPlayerIndex() + 1) % players.size());
+            }
+        } catch (Exception e) {
+            System.out.println("Error occured : " + e);
+        } finally {
+            sc.close();
         }
-
-        Game game = gameService.createGame(size, players);
-        game = gameService.startGame(game);
-        boardService.printBoard(game.getBoard());        
-
-        sc.close();
     }
 }

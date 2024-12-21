@@ -39,5 +39,13 @@ public class Cell {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+    public Cell clone() {
+        Cell cell = new Cell(this.row, this.col);
+        cell.cellState = this.cellState;
+        cell.player = this.player;
+
+        return cell;
+    }
     
 }
