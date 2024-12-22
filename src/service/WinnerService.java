@@ -81,7 +81,7 @@ public class WinnerService {
 
         // if(invalidMapCount == (board.getSize() + 3)) {
         if(checkDraw()) {
-            throw new GameDrawnException("No more winner possible.");
+            throw new GameDrawnException("Game is drawn. No more winner possible.");
         }
         
         return null;
