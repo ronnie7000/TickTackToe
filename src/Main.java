@@ -10,6 +10,7 @@ import src.model.Move;
 import src.model.Player;
 import src.model.enums.GameState;
 import src.service.BoardService;
+import src.service.BotPlayingStrategyImpl;
 import src.service.GameService;
 import src.service.PlayerService;
 
@@ -18,7 +19,8 @@ public class Main {
         PlayerService playerService = new PlayerService();
         GameService gameService = new GameService();
         BoardService boardService = new BoardService();
-        GameController gameController = new GameController(playerService, gameService);
+        BotPlayingStrategyImpl botPlayingStrategy = new BotPlayingStrategyImpl();
+        GameController gameController = new GameController(playerService, gameService, botPlayingStrategy);
         Scanner sc = new Scanner(System.in);
 
         try {
@@ -42,6 +44,10 @@ public class Main {
 
                 Move move = gameController.createMove(currentPlayer, game);
                 try {
+                    if(move == null) {
+                        System.out.println("Please enter valid cell details");
+                        continue;
+                    }
                     Player winner = gameController.checkWinner(game.getBoard(), move, game.getWinnerService());
                     if (winner != null) {
                         game.setGameState(GameState.WINNER_DONE);
