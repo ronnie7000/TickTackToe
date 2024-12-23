@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import src.exception.InvalidUndoMoveException;
 import src.model.Board;
 import src.model.BotPlayer;
 import src.model.Game;
@@ -84,5 +85,16 @@ public class GameController {
 
     public Player checkWinner(Board board, Move move, WinnerService winnerService) {
         return winnerService.checkWinner(board, move);
+    }
+
+    public Game undoMoves(int undoMovesCount, Game game) {
+        if (undoMovesCount > game.getOldMoves().size()) {
+            throw new InvalidUndoMoveException("Invalid undo moves count.");
+        }
+        return gameService.undoMoves(undoMovesCount, game);
+    }
+
+    public void getReplay(Game game) {
+        gameService.getReplay(game);
     }
 }

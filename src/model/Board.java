@@ -39,7 +39,7 @@ public class Board {
 
         for(int i = 0; i < this.size; i++) {
             for(int j = 0; j < this.size; j++) {
-                board.cells.get(i).add(j, this.cells.get(i).get(j).clone());
+                board.cells.get(i).set(j, this.cells.get(i).get(j).clone());
             }
         }
         return board;

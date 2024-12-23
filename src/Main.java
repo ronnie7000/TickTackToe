@@ -39,12 +39,19 @@ public class Main {
                 Player currentPlayer = game.getPlayers().get(nextPlayerIndex);
 
                 System.out.println("Player to make a move : " + currentPlayer.getName());
+                // System.out.println("Do you want to undo> If yes enter the number of steps or else enter 0 : ");
+                // int undoMoves = sc.nextInt();
+
+                // if (undoMoves != 0) {
+                //     game = gameController.undoMoves(undoMoves, game);
+                // }
+
                 boardService.printBoard(game.getBoard());
                 System.out.println();
 
                 Move move = gameController.createMove(currentPlayer, game);
                 try {
-                    if(move == null) {
+                    if (move == null) {
                         System.out.println("Please enter valid cell details");
                         continue;
                     }
@@ -53,6 +60,13 @@ public class Main {
                         game.setGameState(GameState.WINNER_DONE);
                         System.out.println("Winner is " + winner.getName());
                         boardService.printBoard(game.getBoard());
+
+                        System.out.println("Do you want a replay? Pres 1 for yes or 0 for no.");
+                        int replay = sc.nextInt();
+
+                        if (replay == 1) {
+                            gameController.getReplay(game);
+                        }
                         break;
                     }
                 } catch (GameDrawnException e) {

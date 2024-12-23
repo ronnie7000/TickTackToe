@@ -66,6 +66,10 @@ public class Game {
         this.nextPlayerIndex = nextPlayerIndex;
     }
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
